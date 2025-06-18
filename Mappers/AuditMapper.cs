@@ -17,7 +17,6 @@ static class AuditMapper
       EventType = audit.EventType,
       Payload = audit.Payload
     };
-    throw new NotImplementedException();
   }
 
   public static AuditEventResponse ToEventModel(Audit audit)

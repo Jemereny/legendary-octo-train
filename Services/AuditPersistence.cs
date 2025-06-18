@@ -11,9 +11,17 @@ public class AuditPersistence
   // Should work for now
   private List<PersistentAudit> audits = new();
 
-  public IEnumerable<Audit> GetAudits(Audit audit)
+  public IEnumerable<Audit> GetAudits()
   {
-    throw new NotImplementedException();
+    return audits.Select(AuditMapper.ToDomainModel);
+  }
+
+  public IEnumerable<Audit> GetAudits(string[] ids)
+  {
+    var selectedIds = new HashSet<string>(ids);
+    return audits
+    .Where(audit => selectedIds.Contains(audit.Id))
+    .Select(AuditMapper.ToDomainModel);
   }
 
   public Audit AddAudit(Audit audit)

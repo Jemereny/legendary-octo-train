@@ -1,6 +1,7 @@
 using SingularHealth.Models.Persistence;
 using SingularHealth.Models.Domain;
-using SingularHealth.Models.Events;
+using SingularHealth.Models.Response;
+using System.Globalization;
 
 namespace SingularHealth.Mappers;
 
@@ -17,6 +18,18 @@ static class AuditMapper
       Payload = audit.Payload
     };
     throw new NotImplementedException();
+  }
+
+  public static AuditEventResponse ToEventModel(Audit audit)
+  {
+    return new AuditEventResponse
+    {
+      Id = audit.Id,
+      TimestampInISO8601 = audit.Timestamp.ToString("o", CultureInfo.InvariantCulture),
+      ServiceName = audit.ServiceName,
+      EventType = audit.EventType,
+      Payload = audit.Payload
+    };
   }
 
   public static PersistentAudit ToPersistenceModel(Audit audit)

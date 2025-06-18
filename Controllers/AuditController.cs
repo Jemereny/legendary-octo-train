@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using SingularHealth.Models.Events;
 using SingularHealth.Services;
@@ -12,9 +13,9 @@ public class AuditController(ILogger<AuditController> logger, AuditService audit
   [HttpGet("events")]
   [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuditEvent))]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<IActionResult> GetEvents()
+  public IActionResult GetEvents()
   {
-    return Ok(Array.Empty<object>());
+    return Ok(auditService.GetAudit());
   }
 
   [HttpPost("events")]
@@ -34,8 +35,12 @@ public class AuditController(ILogger<AuditController> logger, AuditService audit
   [HttpPost("events/replay")]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public void ReplayEvents()
+  public IActionResult ReplayEvents([FromBody] ReplayEvent replayEvent)
   {
-    return;
+    var selectedAudit = auditService.GetAuditsForReplay(replayEvent.Ids);
+
+    _logger.LogInformation($"Replaying selected events: {JsonSerializer.Serialize(selectedAudit.Select(audit => audit.Id))}"); ;
+
+    return NoContent();
   }
 }

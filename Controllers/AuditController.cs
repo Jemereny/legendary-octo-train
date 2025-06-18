@@ -1,11 +1,11 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using SingularHealth.Models.Events;
+using SingularHealth.Services;
 
 namespace SingularHealth.Controllers;
 
 [ApiController]
-public class AuditController(ILogger<AuditController> logger) : ControllerBase
+public class AuditController(ILogger<AuditController> logger, AuditService auditService) : ControllerBase
 {
   ILogger<AuditController> _logger = logger;
 
@@ -20,11 +20,15 @@ public class AuditController(ILogger<AuditController> logger) : ControllerBase
   [HttpPost("events")]
   [ProducesResponseType(StatusCodes.Status201Created)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public IEnumerable<string> PostEvents([FromBody] AuditEvent auditEvent)
+  public IActionResult PostEvents([FromBody] AuditEvent auditEvent)
   {
-    Console.WriteLine("hello world");
-    Console.WriteLine(JsonSerializer.Serialize(auditEvent));
-    return [];
+    var audit = auditService.AddAudit(
+      auditEvent.TimestampInISO8601,
+      auditEvent.ServiceName,
+      auditEvent.EventType,
+      auditEvent.Payload);
+
+    return Ok(new { id = audit.Id });
   }
 
   [HttpPost("events/replay")]

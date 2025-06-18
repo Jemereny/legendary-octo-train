@@ -4,11 +4,11 @@ namespace SingularHealth.Models.Events;
 
 public class AuditEvent
 {
+  /// <summary>
+  /// Timestamp in ISO8601
+  /// </summary>
   [Required]
-  public required string Id { get; init; }
-
-  [Required]
-  public required string Timestamp { get; init; }
+  public required string TimestampInISO8601 { get; init; }
 
   [Required]
   public required string ServiceName { get; init; }

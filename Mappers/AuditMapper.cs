@@ -8,16 +8,26 @@ static class AuditMapper
 {
   public static Audit ToDomainModel(PersistentAudit audit)
   {
+    return new Audit
+    {
+      Id = audit.Id,
+      Timestamp = audit.Timestamp,
+      ServiceName = audit.ServiceName,
+      EventType = audit.EventType,
+      Payload = audit.Payload
+    };
     throw new NotImplementedException();
   }
 
-  public static Audit ToDomainModel(AuditEvent audit)
+  public static PersistentAudit ToPersistenceModel(Audit audit)
   {
-    throw new NotImplementedException();
-  }
-
-  public static Audit ToPersistenceModel(PersistentAudit audit)
-  {
-    throw new NotImplementedException();
+    return new PersistentAudit
+    {
+      Id = audit.Id,
+      Timestamp = audit.Timestamp,
+      ServiceName = audit.ServiceName,
+      EventType = audit.EventType,
+      Payload = audit.Payload
+    };
   }
 }

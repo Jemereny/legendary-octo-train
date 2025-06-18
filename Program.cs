@@ -1,4 +1,5 @@
 using System.Text.Json;
+using SingularHealth.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<AuditService>();
+builder.Services.AddSingleton<AuditPersistence>();
 
 var app = builder.Build();
 

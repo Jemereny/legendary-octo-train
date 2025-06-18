@@ -1,0 +1,96 @@
+{
+	"info": {
+		"_postman_id": "09507a9d-e275-41a8-8e5c-a9236f193625",
+		"name": "SingularHealth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Events",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/events?serviceName=hello&eventType=ACTIOn&timeRange=[\"2025-02-18T12:53:18.0000000Z\", \"2025-10-18T12:53:18Z\"]",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"events"
+					],
+					"query": [
+						{
+							"key": "serviceName",
+							"value": "hello"
+						},
+						{
+							"key": "eventType",
+							"value": "ACTIOn"
+						},
+						{
+							"key": "timeRange",
+							"value": "[\"2025-02-18T12:53:18.0000000Z\", \"2025-10-18T12:53:18Z\"]"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Event",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"timestampInISO8601\": \"2025-10-18T12:53:18Z\",\n    \"serviceName\": \"serviceName\",\n    \"eventType\": \"ACTION\",\n    \"payload\": \"base64\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/events",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Replay event",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ids\": [\n        \"60255e26-ad6d-42fb-bb8a-c2f73f200a10\",\n        \"b7c2ab2e-9fc0-4299-981d-d79ba3ffcaed\"\n    ]\n}   ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/events/replay",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"events",
+						"replay"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

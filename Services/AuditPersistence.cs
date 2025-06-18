@@ -10,9 +10,16 @@ public class AuditPersistence
 {
   private ConcurrentBag<PersistentAudit> audits = new();
 
-  public IEnumerable<Audit> GetAudits()
+  public IEnumerable<Audit> GetAudits(string? serviceName, string? eventType, Tuple<DateTime, DateTime>? timeRange)
   {
-    return audits.Select(AuditMapper.ToDomainModel);
+    var currentAudits = audits.Select(x => x);
+
+    if (serviceName != null) currentAudits = currentAudits.Where(audit => audit.ServiceName == serviceName);
+    if (eventType != null) currentAudits = currentAudits.Where(audit => audit.EventType == eventType);
+    if (timeRange != null) currentAudits = currentAudits.Where(audit => timeRange.Item1.CompareTo(audit.Timestamp) <= 0 && timeRange.Item2.CompareTo(audit.Timestamp) >= 0);
+
+    return currentAudits
+    .Select(AuditMapper.ToDomainModel);
   }
 
   public IEnumerable<Audit> GetAudits(string[] ids)

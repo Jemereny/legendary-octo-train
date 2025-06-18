@@ -6,19 +6,19 @@ namespace SingularHealth.Services;
 
 public class AuditService(AuditPersistence auditPersistence)
 {
-  public IEnumerable<AuditEventResponse> GetAudit()
+  public IEnumerable<AuditEventResponse> GetAudits(string? serviceName, string? eventType, Tuple<DateTime, DateTime>? timeRange)
   {
-    return auditPersistence.GetAudits().Select(AuditMapper.ToEventModel);
+    var audits = auditPersistence.GetAudits(serviceName, eventType, timeRange);
+
+    return audits.OrderBy(audit => audit.Timestamp).Select(AuditMapper.ToEventModel);
   }
 
   public IEnumerable<AuditEventResponse> GetAuditsForReplay(string[] ids)
   {
     var audits = auditPersistence.GetAudits(ids);
 
-    // Sort to replay events in correct time order
-    audits.ToList().Sort((a, b) => a.Timestamp.CompareTo(b.Timestamp));
-
-    return audits.Select(AuditMapper.ToEventModel);
+    // Sort to replay events in the ascending time order
+    return audits.OrderBy(audit => audit.Timestamp).Select(AuditMapper.ToEventModel);
   }
 
   public Audit AddAudit(string timestampInISO8601, string serviceName, string eventType, string payload)
